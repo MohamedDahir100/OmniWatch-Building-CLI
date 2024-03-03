@@ -1,8 +1,6 @@
 import mqtt_manager
 import time
-from user_model import populate_users
-from utils import login
-from building import print_building
+from utils import login, choose_room, get_num_users
 
 # Main function for CLI application:
 def main():
@@ -19,8 +17,20 @@ def main():
     # Initialize mqtt client:
     mqttClient = mqtt_manager.MQTTClient()
 
+    # Timeout to wait for mqtt connectino to be established:
+    time.sleep(1)
 
-    
+    # Initialize amount of students, teachers, deans in the frontend:
+    get_num_users(mqttClient)
+
+    # Start loop of moving between rooms:
+    choose_room(user, mqttClient)
+
+    # Passed this logic means that we have exited the building:
+    mqttClient.disconnect()
+    print("Exited building, Goodbye!")
+
+
 
 
 if __name__ == "__main__":

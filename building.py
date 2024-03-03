@@ -4,12 +4,12 @@ from bson.objectid import ObjectId
 
 def populate_building():
     building_layout = {
-        "Lobby": ["Classroom", "Library", "Laboratory", "Staff Lounge", "Office", "Cafeteria"],
+        "Lobby": ["Classroom", "Library", "Laboratory", "Staff Lounge", "Dean's Office", "Cafeteria"],
         "Classroom": ["Lobby"],
         "Library": ["Lobby"],
         "Laboratory": ["Lobby"],
         "Staff Lounge": ["Lobby"],
-        "Office": ["Lobby"],
+        "Dean's Office": ["Lobby"],
         "Cafeteria": ["Lobby"]
     }   
     
@@ -17,7 +17,7 @@ def populate_building():
     building_collection.insert_one(building_layout)
 
 def list_adjacent_rooms(curr_room):
-    building = db.buildings.find_one({'_id': ObjectId('65e42bde45bed0e6256f0c45')})
+    building = db.buildings.find_one({'_id': ObjectId('65e4465d15b35d4489e1f96e')})
     adjacent_rooms = building[curr_room]
 
     # Print the adjacent rooms, numbered
@@ -36,3 +36,4 @@ def print_building(layout_file):
 
 
 
+populate_building()
