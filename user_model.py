@@ -9,9 +9,9 @@ def populate_users():
     users = [
         {"username": "student1", "password": hash_password("password1"), "permission": "student", "room": "Lobby"},
         {"username": "student2", "password": hash_password("password2"), "permission": "student", "room": "Lobby"},
-        {"username": "teacher1", "password": hash_password("password3"), "permission": "staff", "room": "Staff Lounge"},
-        {"username": "teacher2", "password": hash_password("password4"), "permission": "staff", "room": "Classroom"},
-        {"username": "admin", "password": hash_password("adminpass"), "permission": "admin", "room": "Dean's Office"},
+        {"username": "teacher1", "password": hash_password("password3"), "permission": "staff", "room": "Lobby"},
+        {"username": "teacher2", "password": hash_password("password4"), "permission": "staff", "room": "Lobby"},
+        {"username": "admin", "password": hash_password("adminpass"), "permission": "admin", "room": "Lobby"},
     ]
 
     users_collection = db.users
@@ -35,8 +35,12 @@ class User:
         else:
             return False
         
-    def changeRoom(self, newRoom):
+    def change_room(self, newRoom):
         self.room = newRoom
+        db.users.update_one(
+            {'username': self.username},
+            {'$set': {'room': newRoom}}
+        )
     
-    def inLobby(self):
-        self.room == "Lobby"
+    def in_lobby(self):
+        return self.room == "Lobby"
