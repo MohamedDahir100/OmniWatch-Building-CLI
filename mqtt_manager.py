@@ -29,7 +29,7 @@ class MQTTClient:
         self.client.disconnect()
 
     def on_connect(self, client, userdata, flags, rc):
-        print(f"Connected with result code {rc}")
+        print(f"\nEstablished connection with GuardianScribe logging system\n")
 
     def on_message(self, client, userdata, msg):
         print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
