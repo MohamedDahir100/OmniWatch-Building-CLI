@@ -1,12 +1,14 @@
 import json
 from mongo_connect import db
 import bcrypt
-from user_model import User
+from user_model import User, hash_password
 from building import list_adjacent_rooms, print_building
 from datetime import datetime
 
 # Login function
 def login():
+    print("Please Enter your login: \n")
+
     username = input("Username: ")
     password = input("Password: ")
 
@@ -19,6 +21,46 @@ def login():
     else:
         print("Login failed. Please try again.")
         return False, None
+    
+# Sign up function for new users:
+def sign_up(client):
+    users = db.users
+    print("Enter a new username and password: \n")
+    username = input("Username: ")
+    password = input("Password: ")
+
+    if users.count_documents({'username': username}) > 0:
+        print("Username already exists. find a new username")
+        return False, None
+    
+    permission = input("What type of user are you? (student, staff, admin):\n")
+    if permission not in ["student", "staff", "admin"]:
+        print("Error: user type must be from these 3 options")
+        return False, None
+    
+    
+    hashed_pass = hash_password(password)
+
+    user_id = users.insert_one({
+        'username': username,
+        'password': hashed_pass,
+        'permission': permission,
+        'room': 'Lobby'
+    }).inserted_id
+
+    print("New user successfully created.")
+
+    # Creating user class to interact with CLI:
+    curr_user = User(username, permission, 'Lobby')
+
+    # Sending new user to frontend to up user count in UI:
+    log = {"count": 1, "user_type": permission}
+    client.publish("backend/new_user", json.dumps(log))
+    return True, curr_user
+    
+    
+    
+    
 
 def choose_room(user, client):
     while True:

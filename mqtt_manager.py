@@ -11,16 +11,7 @@ username = os.getenv('MQTT_USERNAME')
 password = os.getenv('MQTT_PASSWORD')
 
 class MQTTClient:
-    # def __init__(self, broker_address=broker_address, port=port, username=username, password=password):
-    #     # Establishing connection:
-    #     self.client = mqtt.Client(transport='websockets')
-    #     self.client.on_connect = self.on_connect
-    #     self.client.on_message = self.on_message
-    #     self.client.username_pw_set(username, password)
-    #     self.client.tls_set(ca_certs=certifi.where())
-    #     self.client.connect(broker_address, port)
-    #     self.client.loop_start()
-    
+
     def __init__(self):
         self.client = mqtt.Client(transport='websockets')
         self.client.on_connect = self.on_connect
